@@ -7,7 +7,16 @@
 python checker.py
 ```
 
-在`checker.py`中指定要统计的路由器
+在`checker.py`中指定要统计的路由器和CVE年代
+
+years必须要包含当前年
+
+```python
+    keywords = ["tenda","tp-link","mercury"]
+    years = ["2024","2023"]
+```
+
+
 
 ```python
 if __name__ == "__main__":

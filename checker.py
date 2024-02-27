@@ -6,7 +6,7 @@ from rprint import *
 from lxml import etree
 
 search_url = "https://www.opencve.io/cve?cvss=&search={product}&page={page}"
-
+years = []
 def get_cve_json(product: str, page: int) -> list:
     header = ["CVE","Vendors","Products","Updated","CVSS v2","CVSS v3","cve-summary"]
     url = search_url.format(product=product, page=page)
@@ -38,12 +38,10 @@ def get_cve_json(product: str, page: int) -> list:
 def result_init(result: dict, cve_list: list) -> None:
     # tmp = {name:{"overflow": 0, "RCE": 0, "command injection": 0,}}
     for cve in cve_list:
-        if type(cve["Products"]) == str and cve["CVE"][4:8] == "2023":
+        if type(cve["Products"]) == str and (cve["CVE"][4:8] in years):
             for name in cve["Products"][2:].split(", "):
                 try:
                     if name not in result.keys():
-                        if name == "Ac18":
-                            info("-----",cve)
                         result.update({name:{"total cve":0, "overflow": 0, "command injection": 0,}})
                 except:
                     error("Error in init, proble wrong product")
@@ -68,8 +66,8 @@ def stastic(result: dict, cve_list: list) -> bool:
 
 if __name__ == "__main__":
     banner()
-    # keywords = ["tenda","tp-link","mercury"]
-    keywords = ["tenda",]
+    keywords = ["tenda","tp-link","mercury"]
+    years = ["2024","2023"]
     for word in keywords:
         cve_list = get_cve_json(word,1)
         result = {}
